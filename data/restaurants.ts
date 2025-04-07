@@ -1,0 +1,78 @@
+export const restaurants = [
+  {
+    id: 1,
+    name: "Home Kitchen",
+    cuisine: "Indian, Italian",
+    rating: 4.8,
+    deliveryTime: "20-30",
+    distance: "5",
+    image: "/placeholder.png",
+    chef: {
+      id: 1,
+      name: "Venkatesh Bhatt",
+      image: "/placeholder.png",
+      specialty: "Fusion Cuisine",
+      experience: "10+ years",
+      rating: 4.8,
+      bio: "Master chef specializing in Indo-Italian fusion"
+    },
+    menu: [
+      {
+        id: 1,
+        name: 'Masala Dosa',
+        description: 'Crispy dosa filled with spiced potato masala,served with chutney and sambar.',
+        image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFzYWxhJTIwZG9zYXxlbnwwfHwwfHx8MA%3D%3D',
+        rating: 4.9,
+        price: 60,
+        isSpicy: false,
+      },
+      {
+        id: 2,
+        name: 'Paneer Butter Masala',
+        description: 'Cottage cheese cubes in rich, creamy tomato gravy.',
+        image: 'https://media.istockphoto.com/id/1349771241/photo/indian-food-kadai-paneer.jpg?s=612x612&w=0&k=20&c=TD4ssNLlzbW2zRqHfilAMpYk01tVwnysKjngTDeFiD4=',
+        rating: 4.8,
+        price: 120,
+        isSpicy: false,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Daamu's Kitchen",
+    cuisine: "Indian",
+    rating: 4.9,
+    deliveryTime: "30-45",
+    distance: "8",
+    image: "/placeholder.png",
+    chef: {
+      id: 1,
+      name: "Daamu",
+      image: "/placeholder.png",
+      specialty: "Fusion Cuisine",
+      experience: "20+ years",
+      rating: 4.9,
+      bio: "Master chef specializing in Indo-Italian fusion"
+    },
+    menu: [
+      {
+        id: 3,
+        name: 'Medu Vada',
+        description: 'Crispy lentil donuts served with coconut chutney and sambar.',
+        image: 'https://media.istockphoto.com/id/666724754/photo/medu-vada-vadai-south-indian-snack.jpg?s=612x612&w=0&k=20&c=ikZigYYu8glS2gEtHcQPUnJGFxsB5CFS6FtNkEilPM8=',
+        rating: 4.7,
+        price: 20,
+        isSpicy: false,
+      },
+      {
+        id: 4,
+        name: 'Chicken Biryani',
+        description: 'Aromatic basmati rice cooked with spices and chicken.',
+        image: 'https://media.istockphoto.com/id/1333127665/photo/chicken-biryani-spicy-indian-malabar-biryani-hyderabadi-biryani-dum-biriyani-pulao-golden.jpg?s=612x612&w=0&k=20&c=63UXYPOISm8nJ8SNK79dDm0w1gY6jXzYQP0heL6fnOg=',
+        rating: 4.9,
+        price: 200,
+        isSpicy: true,
+      },
+    ],
+  },
+];
