@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import bgImage from '../public/bg.jpg';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const Hero = () => {
+interface HeroProps {
+  onSearch?: (value: string) => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (onSearch) {
+      onSearch(value);
+    }
+  };
+
   return (
     <div className="relative min-h-screen flex justify-center items-center">
       <div
@@ -12,6 +26,7 @@ const Hero = () => {
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
+
       <div className="relative w-full h-full px-4 flex items-center justify-center z-10">
         <motion.div
           className="w-full text-center py-10"
@@ -27,6 +42,7 @@ const Hero = () => {
           >
             Experience the Future of <br /> <span className="text-yellow-300">Home Cooking</span>
           </motion.h1>
+
           <motion.p
             className="my-6 text-xl md:text-2xl text-gray-100 font-light drop-shadow-md"
             initial={{ opacity: 0 }}
@@ -35,6 +51,7 @@ const Hero = () => {
           >
             Discover authentic homemade food from passionate chefs in your neighborhood
           </motion.p>
+
           <motion.div
             className="flex justify-center items-center"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -42,6 +59,8 @@ const Hero = () => {
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             <input
+              value={searchTerm}
+              onChange={handleInputChange}
               className="bg-white/90 border-2 border-yellow-300 text-gray-800 p-4 w-[300px] md:w-[500px] lg:w-[600px] rounded-l-lg outline-none focus:border-yellow-500 transition-all duration-300"
               placeholder="Search your dream food, restaurants or more..."
             />
