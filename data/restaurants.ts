@@ -6,7 +6,7 @@ export const restaurants = [
     rating: 4.8,
     deliveryTime: "20-30",
     distance: "5",
-    image: "/placeholder.png",
+    image: 'https://unsplash.com/photos/white-over-the-range-oven-GliaHAJ3_5A',
     chef: {
       id: 1,
       name: "Venkatesh Bhatt",

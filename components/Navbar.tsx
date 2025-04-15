@@ -9,7 +9,7 @@ import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
 const Navbar = () => {
   const [menuFlg, setMenuFlg] = useState(false);
   const pathname = usePathname();
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const [cartItemCount, setCartItemCount] = useState(2);
 
   const handleChange = () => {
     setMenuFlg(!menuFlg);
@@ -68,7 +68,8 @@ const Navbar = () => {
             <UserButton />
           </SignedIn>
           <div className="relative hover:scale-110 hover:text-orange-500 cursor-pointer">
-            <ShoppingCart className="h-6 w-6 md:h-8 md:w-8" />
+            <Link href="/cart">
+            <ShoppingCart className="h-6 w-6 md:h-8 md:w-8"/></Link>
             {cartItemCount >= 0 && (
               <span className="absolute -top-1 -right-1 bg-orange-500 text-xs text-white rounded-full w-5 h-5 flex items-center justify-center">
                 {cartItemCount}
