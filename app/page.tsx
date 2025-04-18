@@ -17,7 +17,7 @@ const Page = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
+    <div className="text-black relative w-full min-h-screen overflow-hidden">
       <Hero onSearch={handleSearch} />
       <Dishes searchTerm={searchTerm} />
       <Map />

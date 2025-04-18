@@ -1,22 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Flame, IndianRupee } from 'lucide-react';
-import { restaurants } from '../data/restaurants';
 
-const Dishes = ({ searchTerm = '' }) => {
-  const dishes = restaurants.flatMap(restaurant =>
-    restaurant.menu.map(item => ({
-      ...item,
-      restaurant: restaurant.name,
-      chef: restaurant.chef.name
-    }))
-  );
+interface Dish {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  rating: number;
+  price: number;
+  is_spicy: boolean;
+  restaurant: string;
+  chef: string;
+}
 
-  const filteredDishes = dishes.filter(dish =>
+interface DishesProps {
+  searchTerm?: string;
+}
+
+const Dishes: React.FC<DishesProps> = ({ searchTerm = '' }) => {
+  const [dishes, setDishes] = useState<Dish[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/dishes')
+      .then((res) => res.json())
+      .then((data: Dish[]) => {
+        setDishes(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching dishes:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  const filteredDishes = dishes.filter((dish) =>
     dish.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     dish.chef.toLowerCase().includes(searchTerm.toLowerCase()) ||
     dish.restaurant.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <section className="py-16 text-white text-center">
+        <p>Loading dishes...</p>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 relative overflow-hidden">
@@ -41,11 +72,11 @@ const Dishes = ({ searchTerm = '' }) => {
                     alt={dish.name}
                     className="w-full h-48 object-cover"
                   />
-                  {dish.isSpicy && (
+                  {dish.is_spicy ? (
                     <div className="absolute top-2 right-2 bg-red-500 rounded-full p-1">
                       <Flame size={16} className="text-white" />
                     </div>
-                  )}
+                  ):""}
                 </div>
 
                 <div className="p-4">
@@ -59,7 +90,7 @@ const Dishes = ({ searchTerm = '' }) => {
                       <span className="ml-1">{dish.rating}</span>
                     </div>
                     <span className="text-lg font-bold flex items-center">
-                      <IndianRupee className='h-4 w-4' />{dish.price}
+                      <IndianRupee className="h-4 w-4" />{dish.price}
                     </span>
                   </div>
 
@@ -75,7 +106,9 @@ const Dishes = ({ searchTerm = '' }) => {
             ))}
           </div>
         ) : (
-          <p className="text-white text-lg">No dishes found for "<span className="font-semibold">{searchTerm}</span>".</p>
+          <p className="text-white text-lg">
+            No dishes found for "<span className="font-semibold">{searchTerm}</span>".
+          </p>
         )}
       </div>
     </section>

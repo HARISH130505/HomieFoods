@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="flex justify-between md:justify-evenly items-center bg-yellow-50 p-4 md:p-3 relative shadow-md">
+      <nav className=" text-black flex justify-between md:justify-evenly items-center bg-yellow-50 p-4 md:p-3 relative shadow-md">
         <Link href="/" onClick={handleLinkClick} className="flex items-center space-x-2">
           <Image
             src="/logo.png"
