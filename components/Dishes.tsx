@@ -11,7 +11,7 @@ interface Dish {
   price: number;
   is_spicy: boolean;
   restaurant: string;
-  chef: string;
+  chef_name: string;
 }
 
 interface DishesProps {
@@ -37,7 +37,7 @@ const Dishes: React.FC<DishesProps> = ({ searchTerm = '' }) => {
 
   const filteredDishes = dishes.filter((dish) =>
     dish.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dish.chef.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    dish.chef_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     dish.restaurant.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -81,7 +81,7 @@ const Dishes: React.FC<DishesProps> = ({ searchTerm = '' }) => {
 
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">{dish.name}</h3>
-                  <p className="text-sm text-orange-500">by {dish.chef}</p>
+                  <p className="text-sm text-orange-500">by {dish.chef_name}</p>
                   <p className="text-sm mt-1">{dish.description}</p>
 
                   <div className="mt-4 flex items-center justify-between">
