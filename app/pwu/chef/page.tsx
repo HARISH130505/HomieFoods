@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { IndianRupee, Plus } from 'lucide-react';
+import { endpoints } from '@/lib/api';
 
 interface MenuItem {
   id: string;
@@ -19,15 +20,39 @@ const Chef = () => {
   const [experience, setExperience] = useState('');
   const [bio, setBio] = useState('');
   const [chefImage, setChefImage] = useState('');
+  const [location, setLocation] = useState('');
+  const [latitude, setLatitude] = useState<number | ''>('');
+  const [longitude, setLongitude] = useState<number | ''>('');
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [newItem, setNewItem] = useState<Partial<MenuItem>>({});
   const [chefProfile, setChefProfile] = useState<any>(null);
   const [restaurantId, setRestaurantId] = useState<number | null>(null);
 
+  const handleDetectGPS = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+    setIsDetectingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLatitude(Number(pos.coords.latitude.toFixed(6)));
+        setLongitude(Number(pos.coords.longitude.toFixed(6)));
+        setIsDetectingLocation(false);
+      },
+      (err) => {
+        console.warn("Could not get GPS coords:", err);
+        setIsDetectingLocation(false);
+        alert("Could not automatically retrieve GPS. You can enter your neighborhood name.");
+      }
+    );
+  };
+
   const handleSaveChefProfile = async () => {
     try {
-      const response = await fetch('http://localhost:3001/chef', {
+      const response = await fetch(endpoints.chef, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -38,7 +63,10 @@ const Chef = () => {
           specialty,
           experience,
           bio,
-          chefImage
+          chefImage,
+          location: location || 'Chennai',
+          latitude: latitude || 13.0827,
+          longitude: longitude || 80.2707,
         })
       });
 
@@ -57,7 +85,7 @@ const Chef = () => {
   const handleAddItem = async () => {
     if (newItem.name && newItem.price && newItem.image && restaurantId) {
       try {
-        const response = await fetch('http://localhost:3001/dishes', {
+        const response = await fetch(endpoints.dishes, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -153,6 +181,46 @@ const Chef = () => {
                     />
                   </div>
                   <div>
+                    <label className="block text-gray-300 mb-2">Kitchen Neighborhood / Area</label>
+                    <input
+                      type="text"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"
+                      placeholder="e.g. Madipakkam, Velachery, T. Nagar, etc."
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-gray-300">Kitchen Map Coordinates (Optional)</label>
+                      <button
+                        type="button"
+                        onClick={handleDetectGPS}
+                        className="text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-2.5 py-1 rounded-lg hover:bg-yellow-500/30"
+                      >
+                        {isDetectingLocation ? "Detecting GPS..." : "📍 Get My Current GPS"}
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="number"
+                        step="any"
+                        value={latitude}
+                        onChange={(e) => setLatitude(e.target.value === '' ? '' : Number(e.target.value))}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white text-xs"
+                        placeholder="Latitude (e.g. 13.0827)"
+                      />
+                      <input
+                        type="number"
+                        step="any"
+                        value={longitude}
+                        onChange={(e) => setLongitude(e.target.value === '' ? '' : Number(e.target.value))}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white text-xs"
+                        placeholder="Longitude (e.g. 80.2707)"
+                      />
+                    </div>
+                  </div>
+                  <div>
                     <label className="block text-gray-300 mb-2">Profile Image URL</label>
                     <input
                       type="text"
@@ -164,9 +232,9 @@ const Chef = () => {
                   </div>
                   <button
                     onClick={handleSaveChefProfile}
-                    className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:scale-110 cursor-pointer"
+                    className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:scale-110 cursor-pointer font-bold"
                   >
-                    Save Profile
+                    Save Kitchen Profile
                   </button>
                 </div>
               </div>

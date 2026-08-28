@@ -47,8 +47,8 @@ const Footer = () => {
         </div>
       </div>
       <div className="mt-4 py-4 bg-black text-center text-white">
-          <p>&copy; 2025 HomieFoods. All rights reserved.</p>
-        </div>
+        <p>&copy; 2026 HomieFoods. All rights reserved.</p>
+      </div>
     </footer>
   );
 };

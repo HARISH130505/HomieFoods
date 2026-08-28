@@ -1,16 +1,16 @@
-'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Star, Clock, MapPin } from 'lucide-react';
+import { endpoints } from '@/lib/api';
 
 interface Vendor {
   id: number;
   name: string;
   image: string;
   rating: number;
-  deliveryTime: number;
-  distance: number;
+  deliveryTime: number | string;
+  distance: number | string;
   cuisines: string;
   chef: {
     name: string;
@@ -29,15 +29,19 @@ const VendorGrid = () => {
     const fetchRestaurants = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://localhost:3001/restaurants');
+        setError(null);
+        const res = await fetch(endpoints.restaurants);
+        if (!res.ok) throw new Error('Failed to fetch from database');
         const data = await res.json();
         if (Array.isArray(data)) {
           setRestaurants(data);
         } else {
-          throw new Error('Invalid data structure');
+          setRestaurants([]);
         }
       } catch (err: any) {
+        console.error('Error fetching restaurants from database:', err.message);
         setError(err.message || 'Failed to fetch restaurants');
+        setRestaurants([]);
       } finally {
         setLoading(false);
       }
