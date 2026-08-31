@@ -94,20 +94,21 @@ const initDb = () => {
     }
   });
 
-  // Ensure restaurants table has location and coordinates
-  const alterRestaurantsTable = `
-    ALTER TABLE restaurants 
-    ADD COLUMN IF NOT EXISTS location VARCHAR(255) DEFAULT 'Chennai',
-    ADD COLUMN IF NOT EXISTS latitude DECIMAL(10, 8) DEFAULT 13.0827,
-    ADD COLUMN IF NOT EXISTS longitude DECIMAL(11, 8) DEFAULT 80.2707;
-  `;
-  pool.query(alterRestaurantsTable, (err) => {
-    if (err) {
-      console.log('Restaurants schema info:', err.message);
-    } else {
-      console.log('✅ Restaurants location/coords columns ready');
-    }
-  });
+  // Add location/coordinates columns one at a time (no IF NOT EXISTS — MySQL < 8.0 compatibility)
+  const addColumn = (sql, label) => {
+    pool.query(sql, (err) => {
+      if (err && err.errno !== 1060) {
+        // errno 1060 = ER_DUP_FIELDNAME: column already exists, safe to ignore
+        console.warn(`⚠️ Could not add column "${label}":`, err.message);
+      } else if (!err) {
+        console.log(`✅ Column "${label}" added to restaurants`);
+      }
+    });
+  };
+
+  addColumn(`ALTER TABLE restaurants ADD COLUMN location VARCHAR(255) DEFAULT 'Chennai'`, 'location');
+  addColumn(`ALTER TABLE restaurants ADD COLUMN latitude DECIMAL(10, 8) DEFAULT 13.0827`, 'latitude');
+  addColumn(`ALTER TABLE restaurants ADD COLUMN longitude DECIMAL(11, 8) DEFAULT 80.2707`, 'longitude');
 };
 
 pool.getConnection((err, conn) => {
