@@ -121,8 +121,13 @@ pool.getConnection((err, conn) => {
   }
 });
 
-// Basic root
-app.get('/', (req, res) => res.send('HomieFoods backend running'));
+// Health root
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "HomieFoods backend is running",
+  });
+});
 
 // Create Chef + Restaurant
 app.post('/chef', (req, res) => {
